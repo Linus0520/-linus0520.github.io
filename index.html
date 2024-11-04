@@ -60,6 +60,8 @@
               const result = await response.json();
               alert(`注册成功，用户ID: ${result.userID}`);
             } else {
+              const error = await response.json();
+              console.error("注册失败原因:", error);
               alert("注册失败，请重试。");
             }
           } catch (error) {
