@@ -10,10 +10,10 @@
     <form id="registrationForm">
         <label for="email">邮箱:</label>
         <input type="email" id="email" name="email" required />
-
+        
         <!-- 隐藏的 userID 字段 -->
         <input type="hidden" id="userID" name="userID" />
-
+        
         <button type="submit">提交</button>
     </form>
 
@@ -26,9 +26,9 @@
 
                 if (liff.isLoggedIn()) {
                     const profile = await liff.getProfile();
-                    document.getElementById("userID").value = profile.userId;
+                    document.getElementById("userID").value = profile.userId; // 填充 userID
                 } else {
-                    liff.login();
+                    liff.login(); // 如果未登录，触发登录
                 }
             } catch (error) {
                 console.error("LIFF 初始化失败", error);
@@ -52,11 +52,11 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    alert(`注册成功，用户ID: ${result.id}`);
+                    alert(`注册成功，用户ID: ${result.id}`); // 显示成功的用户 ID
                 } else {
                     const error = await response.json();
                     console.error("注册失败原因:", error);
-                    alert("注册失败，请重试。");
+                    alert(`注册失败，请重试: ${error.error || '未知错误'}`); // 显示更详细的错误信息
                 }
             } catch (error) {
                 console.error("提交失败", error);
