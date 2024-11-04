@@ -32,7 +32,7 @@
       // 初始化 LIFF，并自动获取 userID
       async function initializeLiff() {
         try {
-          await liff.init({ liffId: "2006527744-EpLOl3jL" });
+          await liff.init({ liffId: "2006527744-EpLOl3jLD" });
 
           if (liff.isLoggedIn()) {
             const profile = await liff.getProfile();
@@ -43,6 +43,7 @@
           }
         } catch (error) {
           console.error("LIFF 初始化失败", error);
+          alert("LIFF 初始化失败，请检查控制台中的错误信息。");
         }
       }
 
