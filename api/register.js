@@ -11,35 +11,18 @@ export default async (req, res) => {
 
     const { email, userID } = req.body;
 
-    // 检查邮箱和 userID 是否存在
     if (!email || !userID) {
         return res.status(400).json({ error: '邮箱和 userID 是必需的' });
     }
 
     try {
-        // 检查是否已存在相同的 userID 或 email
-        const { data: existingUser, error: fetchError } = await supabase
+        const { data, error } = await supabase
             .from('users')
-            .select('*')
-            .or(`email.eq.${email},userID.eq.${userID}`);
+            .insert([{ email, userID }]);
 
-        if (fetchError) {
-            console.error("获取用户错误:", fetchError);
-            return res.status(500).json({ error: '获取用户失败', details: fetchError.message });
-        }
-
-        if (existingUser.length > 0) {
-            return res.status(400).json({ error: '用户已存在' });
-        }
-
-        // 插入新用户
-        const { data, error: insertError } = await supabase
-            .from('users')
-            .insert([{ email, userID }]); // 确保此处的 userID 对应于数据库中的列名
-
-        if (insertError) {
-            console.error("插入错误:", insertError);
-            return res.status(500).json({ error: '插入失败', details: insertError.message });
+        if (error) {
+            console.error("插入错误:", error);
+            return res.status(500).json({ error: '插入失败', details: error.message });
         }
 
         if (!data || data.length === 0) {
