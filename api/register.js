@@ -16,9 +16,10 @@ export default async (req, res) => {
     }
 
     try {
+        // 确保列名正确，例如如果列名是 "userid"，请调整如下
         const { data, error } = await supabase
             .from('users')
-            .insert([{ email, userID }]);
+            .insert([{ email, userID: userID }]); // 确保此处的 userID 对应于数据库中的列名
 
         if (error) {
             console.error("插入错误:", error);
