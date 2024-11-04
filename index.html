@@ -20,7 +20,7 @@
     <!-- 引入 LIFF SDK -->
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script>
-      // 初始化 LIFF，并自动获取 userID
+      // 初始化 LIFF
       async function initializeLiff() {
         try {
           await liff.init({ liffId: "2006527744-EpLOl3jL" }); // 替换为你的 LIFF ID
@@ -45,14 +45,17 @@
           const userID = document.getElementById("userID").value;
 
           try {
-            const response = await fetch("http://localhost:3000/register", {
-              // 后端 URL
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ email, userID }),
-            });
+            const response = await fetch(
+              "https://linus0520-github-io.vercel.app/register",
+              {
+                // 替换为你的 Vercel URL
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, userID }),
+              }
+            );
 
             if (response.ok) {
               const result = await response.json();
