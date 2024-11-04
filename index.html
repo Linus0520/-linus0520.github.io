@@ -7,12 +7,7 @@
   </head>
   <body>
     <h1>注册表单</h1>
-    <form
-      id="registrationForm"
-      method="POST"
-      action="https://your-backend-url.com/register"
-      onsubmit="return validateForm()"
-    >
+    <form id="registrationForm">
       <label for="email">邮箱:</label>
       <input type="email" id="email" name="email" required />
 
@@ -22,50 +17,54 @@
       <button type="submit">提交</button>
     </form>
 
-    <h2>用户信息</h2>
-    <p>邮箱: <span id="displayEmail"></span></p>
-    <p>用户 ID: <span id="displayUserID"></span></p>
-
     <!-- 引入 LIFF SDK -->
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script>
       // 初始化 LIFF，并自动获取 userID
       async function initializeLiff() {
         try {
-          await liff.init({ liffId: "2006527744-EpLOl3jL" });
+          await liff.init({ liffId: "2006527744-EpLOl3jL" }); // 替换为你的 LIFF ID
 
           if (liff.isLoggedIn()) {
             const profile = await liff.getProfile();
             document.getElementById("userID").value = profile.userId; // 自动填充 userID
-            document.getElementById("displayUserID").innerText = profile.userId; // 显示 userID
           } else {
             liff.login(); // 如果用户未登录，自动触发 LIFF 登录
           }
         } catch (error) {
           console.error("LIFF 初始化失败", error);
-          alert("LIFF 初始化失败，请检查控制台中的错误信息。");
         }
       }
 
-      // 验证表单
-      function validateForm() {
-        const email = document.getElementById("email").value;
-        const userID = document.getElementById("userID").value;
+      document
+        .getElementById("registrationForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
 
-        if (!email) {
-          alert("请填写邮箱！");
-          return false; // 阻止提交
-        }
+          const email = document.getElementById("email").value;
+          const userID = document.getElementById("userID").value;
 
-        if (!userID) {
-          alert("未获得用户ID，请重新登录。");
-          return false; // 阻止提交
-        }
+          try {
+            const response = await fetch("http://localhost:3000/register", {
+              // 后端 URL
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, userID }),
+            });
 
-        // 显示邮箱
-        document.getElementById("displayEmail").innerText = email;
-        return true; // 允许提交
-      }
+            if (response.ok) {
+              const result = await response.json();
+              alert(`注册成功，用户ID: ${result.userID}`);
+            } else {
+              alert("注册失败，请重试。");
+            }
+          } catch (error) {
+            console.error("提交失败", error);
+            alert("提交失败，请检查控制台。");
+          }
+        });
 
       initializeLiff();
     </script>
