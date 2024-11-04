@@ -25,7 +25,7 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script>
       // 初始化 LIFF，并自动获取 userID
-      async funcgit tion initializeLiff() {
+      async function initializeLiff() {
         try {
           await liff.init({ liffId: "2006527744-EpLOl3jL" });
 
@@ -33,7 +33,7 @@
             const profile = await liff.getProfile();
             document.getElementById("userID").value = profile.userId; // 自动填充 userID
             document.getElementById("email").value = profile.email; // 自动填充 userID
-            console.log(profile.userId,profile.email)
+            console.log(profile.userId, profile.email);
           } else {
             liff.login(); // 如果用户未登录，自动触发 LIFF 登录
           }
