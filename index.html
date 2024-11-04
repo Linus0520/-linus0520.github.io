@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LINE Registration Form</title>
+  </head>
+  <body>
+    <h1>注册表单</h1>
+    <form
+      id="registrationForm"
+      method="POST"
+      action="https://your-backend-url.com/register"
+    >
+      <label for="email">邮箱:</label>
+      <input type="email" id="email" name="email" required />
+
+      <!-- 隐藏的 userID 字段 -->
+      <input type="hidden" id="userID" name="userID" />
+
+      <button type="submit">提交</button>
+    </form>
+
+    <!-- 引入 LIFF SDK -->
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+      // 初始化 LIFF，并自动获取 userID
+      async funcgit tion initializeLiff() {
+        try {
+          await liff.init({ liffId: "2006527744-EpLOl3jL" });
+
+          if (liff.isLoggedIn()) {
+            const profile = await liff.getProfile();
+            document.getElementById("userID").value = profile.userId; // 自动填充 userID
+          } else {
+            liff.login(); // 如果用户未登录，自动触发 LIFF 登录
+          }
+        } catch (error) {
+          console.error("LIFF 初始化失败", error);
+        }
+      }
+
+      initializeLiff();
+    </script>
+  </body>
+</html>
