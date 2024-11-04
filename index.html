@@ -20,16 +20,15 @@
     <!-- 引入 LIFF SDK -->
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script>
-        // 初始化 LIFF
         async function initializeLiff() {
             try {
-                await liff.init({ liffId: "2006527744-EpLOl3jL" }); // 替换为你的 LIFF ID
+                await liff.init({ liffId: "2006527744-EpLOl3jL" });
 
                 if (liff.isLoggedIn()) {
                     const profile = await liff.getProfile();
-                    document.getElementById("userID").value = profile.userId; // 自动填充 userID
+                    document.getElementById("userID").value = profile.userId;
                 } else {
-                    liff.login(); // 如果用户未登录，自动触发 LIFF 登录
+                    liff.login();
                 }
             } catch (error) {
                 console.error("LIFF 初始化失败", error);
@@ -43,7 +42,7 @@
             const userID = document.getElementById("userID").value;
 
             try {
-                const response = await fetch("/api/register", { // Vercel API 路由
+                const response = await fetch("/api/register", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -53,7 +52,7 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    alert(`注册成功，用户ID: ${result.userID}`);
+                    alert(`注册成功，用户ID: ${result.id}`);
                 } else {
                     const error = await response.json();
                     console.error("注册失败原因:", error);
