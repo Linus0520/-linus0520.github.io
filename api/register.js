@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // 用你的 Supabase URL 和密钥替换下面的值
-const supabaseUrl = 'https://qajorxdihtgtnzwhkrzy.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFham9yeGRpaHRndG56d2hrcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA3MzI0MTEsImV4cCI6MjA0NjMwODQxMX0.dSGkFH8LKzld6_j2nvs7UGVTY4ILSKJ6b4_9TdE1ZcY';
+const supabaseUrl = 'https://qajorxdihtgtnzwhkrzy.supabase.co'; // 替换为你的 Supabase URL
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFham9yeGRpaHRndG56d2hrcnp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA3MzI0MTEsImV4cCI6MjA0NjMwODQxMX0.dSGkFH8LKzld6_j2nvs7UGVTY4ILSKJ6b4_9TdE1ZcY'; // 替换为你的 Supabase 密钥
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default async (req, res) => {
@@ -27,6 +27,11 @@ export default async (req, res) => {
         if (error) {
             console.error("插入错误:", error);
             return res.status(500).json({ error: '插入失败，没有返回数据', details: error.message });
+        }
+
+        // 确保 data 不为空且有返回
+        if (!data || data.length === 0) {
+            return res.status(500).json({ error: '插入失败，没有返回数据' });
         }
 
         // 返回成功响应
