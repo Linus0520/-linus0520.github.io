@@ -25,11 +25,13 @@ export default async (req, res) => {
             return res.status(500).json({ error: '插入失败', details: error.message });
         }
 
+        // 确保 data 不为空
         if (!data || data.length === 0) {
             return res.status(500).json({ error: '插入失败，没有返回数据' });
         }
 
-        res.status(201).json({ id: data[0].id, email, userID });
+        // 直接返回 userID 和 email
+        res.status(201).json({ userID, email });
     } catch (err) {
         console.error("发生未知错误:", err);
         res.status(500).json({ error: '服务器内部错误', details: err.message });
