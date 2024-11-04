@@ -11,6 +11,7 @@
       id="registrationForm"
       method="POST"
       action="https://your-backend-url.com/register"
+      onsubmit="return validateForm()"
     >
       <label for="email">邮箱:</label>
       <input type="email" id="email" name="email" required />
@@ -20,6 +21,10 @@
 
       <button type="submit">提交</button>
     </form>
+
+    <h2>用户信息</h2>
+    <p>邮箱: <span id="displayEmail"></span></p>
+    <p>用户 ID: <span id="displayUserID"></span></p>
 
     <!-- 引入 LIFF SDK -->
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
@@ -32,15 +37,33 @@
           if (liff.isLoggedIn()) {
             const profile = await liff.getProfile();
             document.getElementById("userID").value = profile.userId; // 自动填充 userID
-            document.getElementById("email").value = profile.email; // 自动填充 userID
-            console.log(profile.userId);
-            console.log(profile.email);
+            document.getElementById("displayUserID").innerText = profile.userId; // 显示 userID
           } else {
             liff.login(); // 如果用户未登录，自动触发 LIFF 登录
           }
         } catch (error) {
           console.error("LIFF 初始化失败", error);
         }
+      }
+
+      // 验证表单
+      function validateForm() {
+        const email = document.getElementById("email").value;
+        const userID = document.getElementById("userID").value;
+
+        if (!email) {
+          alert("请填写邮箱！");
+          return false; // 阻止提交
+        }
+
+        if (!userID) {
+          alert("未获得用户ID，请重新登录。");
+          return false; // 阻止提交
+        }
+
+        // 显示邮箱
+        document.getElementById("displayEmail").innerText = email;
+        return true; // 允许提交
       }
 
       initializeLiff();
