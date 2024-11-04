@@ -33,7 +33,8 @@
             const profile = await liff.getProfile();
             document.getElementById("userID").value = profile.userId; // 自动填充 userID
             document.getElementById("email").value = profile.email; // 自动填充 userID
-            console.log(profile.userId, profile.email);
+            console.log(profile.userId);
+            console.log(profile.email);
           } else {
             liff.login(); // 如果用户未登录，自动触发 LIFF 登录
           }
