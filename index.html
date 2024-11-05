@@ -1,70 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LINE Registration Form</title>
-</head>
-<body>
+    <style>
+      /* 通用设置 */
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f9;
+      }
+
+      /* 表单容器 */
+      #registrationForm {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        text-align: left;
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      /* 输入框样式 */
+      input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+      }
+
+      /* 提交按钮样式 */
+      button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #4caf50;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
     <h1>注册表单</h1>
     <form id="registrationForm">
-        <label for="email">邮箱:</label>
-        <input type="email" id="email" name="email" required />
-        
-        <!-- 隐藏的 userID 字段 -->
-        <input type="hidden" id="userID" name="userID" />
-        
-        <button type="submit">提交</button>
+      <label for="email">邮箱:</label>
+      <input type="email" id="email" name="email" required />
+
+      <!-- 隐藏的 userID 字段 -->
+      <input type="hidden" id="userID" name="userID" />
+
+      <button type="submit">提交</button>
     </form>
 
     <!-- 引入 LIFF SDK -->
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script>
-        async function initializeLiff() {
-            try {
-                await liff.init({ liffId: "2006527744-EpLOl3jL" });
+      async function initializeLiff() {
+        try {
+          await liff.init({ liffId: "2006527744-EpLOl3jL" });
 
-                if (liff.isLoggedIn()) {
-                    const profile = await liff.getProfile();
-                    document.getElementById("userID").value = profile.userId; // 填充 userID
-                } else {
-                    liff.login(); // 如果未登录，触发登录
-                }
-            } catch (error) {
-                console.error("LIFF 初始化失败", error);
-            }
+          if (liff.isLoggedIn()) {
+            const profile = await liff.getProfile();
+            document.getElementById("userID").value = profile.userId; // 填充 userID
+          } else {
+            liff.login(); // 如果未登录，触发登录
+          }
+        } catch (error) {
+          console.error("LIFF 初始化失败", error);
         }
+      }
 
-        document.getElementById("registrationForm").addEventListener("submit", async (event) => {
-            event.preventDefault();
+      document
+        .getElementById("registrationForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
 
-            const email = document.getElementById("email").value;
-            const userID = document.getElementById("userID").value;
+          const email = document.getElementById("email").value;
+          const userID = document.getElementById("userID").value;
 
-            try {
-                const response = await fetch("/api/register", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ email, userID }),
-                });
+          try {
+            const response = await fetch("/api/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, userID }),
+            });
 
-                if (response.ok) {
-                    const result = await response.json();
-                    alert(`注册成功，用户ID: ${result.id}`); // 显示成功的用户 ID
-                } else {
-                    const error = await response.json();
-                    console.error("注册失败原因:", error);
-                    alert(`注册失败，请重试: ${error.error || '未知错误'}`); // 显示更详细的错误信息
-                }
-            } catch (error) {
-                console.error("提交失败", error);
-                alert("提交失败，请检查控制台。");
+            if (response.ok) {
+              const result = await response.json();
+              alert(`注册成功，用户ID: ${result.id}`); // 显示成功的用户 ID
+            } else {
+              const error = await response.json();
+              console.error("注册失败原因:", error);
+              alert(`注册失败，请重试: ${error.error || "未知错误"}`); // 显示更详细的错误信息
             }
+          } catch (error) {
+            console.error("提交失败", error);
+            alert("提交失败，请检查控制台。");
+          }
         });
 
-        initializeLiff();
+      initializeLiff();
     </script>
-</body>
+  </body>
 </html>
