@@ -18,7 +18,8 @@ export default async (req, res) => {
     try {
         const { data, error } = await supabase
             .from('users')
-            .insert([{ email, userID }]);
+            .insert([{ email, userID }])
+            .select();
 
         if (error) {
             console.error("插入错误:", error);
