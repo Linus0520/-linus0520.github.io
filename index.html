@@ -70,9 +70,8 @@
     </style>
   </head>
   <body>
-    <h1>注册表单</h1>
     <form id="registrationForm">
-      <label for="email">邮箱:</label>
+      <label for="email">郵箱:</label>
       <input type="email" id="email" name="email" required />
 
       <!-- 隐藏的 userID 字段 -->
@@ -90,9 +89,9 @@
 
           if (liff.isLoggedIn()) {
             const profile = await liff.getProfile();
-            document.getElementById("userID").value = profile.userId; // 填充 userID
+            document.getElementById("userID").value = profile.userId;
           } else {
-            liff.login(); // 如果未登录，触发登录
+            liff.login();
           }
         } catch (error) {
           console.error("LIFF 初始化失败", error);
@@ -118,11 +117,13 @@
 
             if (response.ok) {
               const result = await response.json();
-              alert(`注册成功，用户ID: ${result.id}`); // 显示成功的用户 ID
+              alert(
+                `注册成功，用户ID: ${result.userID}，邮箱: ${result.email}`
+              );
             } else {
               const error = await response.json();
               console.error("注册失败原因:", error);
-              alert(`注册失败，请重试: ${error.error || "未知错误"}`); // 显示更详细的错误信息
+              alert(`注册失败，请重试: ${error.error || "未知错误"}`);
             }
           } catch (error) {
             console.error("提交失败", error);
